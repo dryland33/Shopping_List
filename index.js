@@ -21,11 +21,31 @@ const sl = {
         { name: "bread", checked: false },
       ]
   },
+  
+  //For each item in STORE, generate a string representing an <li> with:  
+  //the item name rendered as inner text
+  //the item's index in the STORE set as a data attribute on the <li>
+  //the item's checked state (true or false) rendered as
+  //the presence or absence of a CSS class for indicating checked items 
+  //(specifically, .shopping-item__checked from index.css)
+  //Join together the individual item strings into one long string
+  //Insert the <li>s string inside the .js-shopping-list <ul> in the DOM.
+
+  generateShoppingListItemsString: function(shoppingList){
+    console.log("generating shopping list elements");
+    return`
+        <li>almonds</li>
+        <li>chocolate</li>
+        <li>figs</li>
+        <li>pork roast</li>`;
+  },
 
   renderShoppingList: function () {
-    // this function will be responsible for rendering the shopping list in
-    // the DOM
     console.log('`renderShoppingList` ran');
+    //generate HTML
+    const shoppingListItemString = this.generateShoppingListItemsString(sl.store.items);
+    //insert HTML into DOM
+    $('.shopping-list').html(shoppingListItemString);
   },
 
   handleNewItemSubmit: function() {
