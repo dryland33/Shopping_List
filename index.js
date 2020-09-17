@@ -21,7 +21,7 @@ const sl = {
         { name: "bread", checked: false },
       ]
   },
-  
+
   //For each item in STORE, generate a string representing an <li> with:  
   //the item name rendered as inner text
   //the item's index in the STORE set as a data attribute on the <li>
@@ -31,13 +31,24 @@ const sl = {
   //Join together the individual item strings into one long string
   //Insert the <li>s string inside the .js-shopping-list <ul> in the DOM.
 
-  generateShoppingListItemsString: function(shoppingList){
+  generateItemElement: function (item, itemIndex, template) {
+    return `
+        <li>${item.name}</li>`;
+  },
+
+  generateShoppingListItemsString: function (shoppingList) {
     console.log("generating shopping list elements");
-    return`
+
+    const items = shoppingList.map((item, index) => this.generateItemElement(item, index));
+  
+    return items.join("");
+    /*
+    return `
         <li>almonds</li>
         <li>chocolate</li>
         <li>figs</li>
         <li>pork roast</li>`;
+    */
   },
 
   renderShoppingList: function () {
@@ -48,18 +59,18 @@ const sl = {
     $('.shopping-list').html(shoppingListItemString);
   },
 
-  handleNewItemSubmit: function() {
+  handleNewItemSubmit: function () {
     // this function will be responsible for when users add a new shopping list item
     console.log('`handleNewItemSubmit` ran');
   },
 
-  handleItemCheckClicked: function() {
+  handleItemCheckClicked: function () {
     // this function will be responsible for when users click the "check" button on
     // a shopping list item.
     console.log('`handleItemCheckClicked` ran');
   },
-  
-  handleDeleteItemClicked: function() {
+
+  handleDeleteItemClicked: function () {
     // this function will be responsible for when users want to delete a shopping list
     // item
     console.log('`handleDeleteItemClicked` ran');
