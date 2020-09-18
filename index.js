@@ -110,9 +110,36 @@ const SL = {
     item.checked = !item.checked;
   },
 
+  deleteItem: function(itemId) {
+    console.log(`Deleting item with id  ${itemId} from shopping list`);
+
+    // as with `addItemToShoppingLIst`, this function also has the side effect of
+    // mutating the items array
+    
+    // First we find the index of the item with the specified id using the native
+    // Array.prototype.findIndex() method.
+    const itemIndex = SL.store.items.findIndex(item => item.id === itemId);
+
+    // Then we call `.splice` at the index of 
+    // the list item we want to remove, with a removeCount of 1.
+    SL.store.items.splice(itemIndex, 1);
+
+    console.log('`deleteItem` ran');
+  },
+
   handleDeleteItemClicked: function () {
-    // this function will be responsible for when users want to delete a shopping list
-    // item
+    // this function will be responsible for 
+    // when users want to delete a shopping list item
+    
+    //listen for a click on the delete button
+    $('.js-shopping-list').on('click', `.js-item-delete`, event => {
+      //get the id for the item to be deleted
+      const id = SL.getItemIdFromElement(event.currentTarget);
+      //remove the item from the model
+      SL.deleteItem(id);
+      //re-render the page
+      SL.renderShoppingList();
+    });
     console.log('`handleDeleteItemClicked` ran');
   }
 };
