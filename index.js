@@ -15,10 +15,11 @@
 const sl = {
   store: {
     items:
-      [{ name: "apples", checked: false },
-        { name: "oranges", checked: false },
-        { name: "milk", checked: true },
-        { name: "bread", checked: false },
+      [
+        {id: cuid(), name: "apples", checked: false},
+        {id: cuid(), name: "oranges", checked: false},
+        {id: cuid(), name: "milk", checked: true},
+        {id: cuid(), name: "bread", checked: false}
       ]
   },
 
@@ -33,7 +34,17 @@ const sl = {
 
   generateItemElement: function (item, itemIndex, template) {
     return `
-        <li>${item.name}</li>`;
+    <li data-item-id="${item.id}">
+      <span class="shopping-item js-shopping-item ${item.checked ? "shopping-item__checked" : ''}">${item.name}</span>
+      <div class="shopping-item-controls">
+        <button class="shopping-item-toggle js-item-toggle">
+            <span class="button-label">check</span>
+        </button>
+        <button class="shopping-item-delete js-item-delete">
+            <span class="button-label">delete</span>
+        </button>
+      </div>
+    </li>`;
   },
 
   generateShoppingListItemsString: function (shoppingList) {
