@@ -12,7 +12,7 @@
 // indicates if it's checked off or not.
 // we're pre-adding items to the shopping list so there's
 // something to see when the page first loads.
-const sl = {
+const SL = {
   store: {
     items:
       [
@@ -50,7 +50,7 @@ const sl = {
   generateShoppingListItemsString: function (shoppingList) {
     console.log("generating shopping list elements");
 
-    const items = shoppingList.map((item, index) => this.generateItemElement(item, index));
+    const items = shoppingList.map((item) => SL.generateItemElement(item));
   
     return items.join("");
     /*
@@ -65,20 +65,49 @@ const sl = {
   renderShoppingList: function () {
     console.log('`renderShoppingList` ran');
     //generate HTML
-    const shoppingListItemString = this.generateShoppingListItemsString(sl.store.items);
+    const shoppingListItemString = SL.generateShoppingListItemsString(SL.store.items);
     //insert HTML into DOM
     $('.shopping-list').html(shoppingListItemString);
   },
 
+  addItemToShoppingList: function(itemName) {
+    console.log(`Adding "${itemName}" to shopping list`);
+    SL.store.items.push({id: cuid(), name: itemName, checked: false});
+  },
+
   handleNewItemSubmit: function () {
     // this function will be responsible for when users add a new shopping list item
-    console.log('`handleNewItemSubmit` ran');
+    $('#js-shopping-list-form').submit(function(event) {
+      event.preventDefault();
+      console.log('`handleNewItemSubmit` ran');
+      const newItemName = $('.js-shopping-list-entry').val();
+      $('.js-shopping-list-entry').val('');
+      SL.addItemToShoppingList(newItemName);
+      SL.renderShoppingList();
+    });
   },
 
   handleItemCheckClicked: function () {
     // this function will be responsible for when users click the "check" button on
     // a shopping list item.
     console.log('`handleItemCheckClicked` ran');
+    $('.js-shopping-list').on('click', `.js-item-toggle`, event => {
+      const id = SL.getItemIdFromElement(event.currentTarget);
+      SL.toggleCheckedForListItem(id);
+      SL.renderShoppingList();
+    });
+  },
+
+  getItemIdFromElement: function(item) {
+    return $(item)
+      .closest('li')
+      .data('item-id');
+  },
+
+  toggleCheckedForListItem: function(itemId) {
+    console.log("Toggling checked property for item with id " + itemId);
+    const item = SL.store.items.find(item => item.id === itemId);
+    item.checked = !item.checked;
   },
 
   handleDeleteItemClicked: function () {
@@ -93,10 +122,10 @@ const sl = {
 // that handle new item submission and user clicks on the "check" and "delete" buttons
 // for individual shopping list items.
 function handleShoppingList() {
-  sl.renderShoppingList();
-  sl.handleNewItemSubmit();
-  sl.handleItemCheckClicked();
-  sl.handleDeleteItemClicked();
+  SL.renderShoppingList();
+  SL.handleNewItemSubmit();
+  SL.handleItemCheckClicked();
+  SL.handleDeleteItemClicked();
 }
 
 // when the page loads, call `handleShoppingList`
